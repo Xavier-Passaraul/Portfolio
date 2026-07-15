@@ -7,13 +7,13 @@ export default function Footer() {
         
         <div className="mb-4 md:mb-0">
           <p className="text-slate-400 text-sm">
-            © {anioActual} Tu Nombre. Todos los derechos reservados.
+            © {anioActual} Xavier Passaraul. Todos los derechos reservados.
           </p>
         </div>
 
         <div className="flex gap-6 justify-center">
           <a 
-            href="https://github.com/tu-usuario" 
+            href="https://github.com/Xavier-Passaraul" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="text-slate-400 hover:text-white transition-colors text-sm font-medium"

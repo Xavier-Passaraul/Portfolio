@@ -16,7 +16,7 @@ export default function Contacto() {
             Envime un Email
           </a>
           <a 
-            href="https://linkedin.com/in/tu-perfil" 
+            href="www.linkedin.com/in/xavier-passaraul-4278b321a" 
             target="_blank" 
             rel="noopener noreferrer" 
             className="px-8 py-3 bg-transparent border border-slate-600 hover:border-slate-400 text-slate-300 font-medium rounded-lg transition-colors"
