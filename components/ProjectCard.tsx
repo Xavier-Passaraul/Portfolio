@@ -29,27 +29,34 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
     <motion.div
       layout
       transition={{ layout: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className="rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-[0_15px_35px_rgba(0,0,0,0.45)]"
+      className={`rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-[0_15px_35px_rgba(0,0,0,0.45)] ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
     >
       {/* Capa 2: gradiente animado + flote + hover — 100% CSS, independiente de Framer */}
       <div
         onClick={() => !abierto && onToggle()}
-        className={`relative p-7 card-gradient ${!abierto ? "cursor-pointer card-hover-lift" : ""}`}
+        className={`relative p-7 card-gradient flex flex-col ${!abierto ? "cursor-pointer card-hover-lift aspect-[3/4] justify-between" : ""}`}
         style={{ backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`, backgroundSize: "300% 300%" }}
       >
         {/* Botón cerrar */}
-        {abierto && (
-          <button
-            onClick={(e) => {
-              e.stopPropagation();
-              onToggle();
-            }}
-            aria-label="Cerrar"
-            className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-2xl font-bold leading-none hover:bg-white/30 transition-colors"
-          >
-            −
-          </button>
-        )}
+        <AnimatePresence>
+          {abierto && (
+            <motion.button
+              initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
+              animate={{ opacity: 1, rotate: 0, scale: 1 }}
+              exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
+              transition={{ duration: 0.4, ease: "easeOut" }}
+              whileHover={{ scale: 1.1 }}
+              onClick={(e) => {
+                e.stopPropagation();
+                onToggle();
+              }}
+              aria-label="Cerrar"
+              className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-2xl font-bold leading-none hover:bg-white/30 transition-colors"
+            >
+              −
+            </motion.button>
+          )}
+        </AnimatePresence>
 
         {/* Header */}
         <div className="relative pr-10">
@@ -70,11 +77,15 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
             {proyecto.titulo}
           </h3>
           <p className="text-white/90 mt-2 leading-relaxed">{proyecto.resumen}</p>
-
-          {!abierto && (
-            <Plus size={16} className="absolute top-0 right-0 text-white/70" />
-          )}
         </div>
+
+        {!abierto && (
+          <div className="flex justify-end mt-4">
+            <span className="w-9 h-9 rounded-full bg-black/25 backdrop-blur-sm flex items-center justify-center">
+              <Plus size={18} className="text-white" />
+            </span>
+          </div>
+        )}
 
         {/* Cuerpo expandible */}
         <AnimatePresence initial={false}>

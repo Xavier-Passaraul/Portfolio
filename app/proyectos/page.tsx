@@ -24,7 +24,7 @@ export default function ProyectosPage() {
       </h1>
       <p className="text-slate-400 mb-10">Del más reciente al más antiguo.</p>
 
-      <motion.div layout className="flex flex-col gap-5">
+      <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
         {ordenados.map((p) => (
           <ProjectCard
             key={p.id}
