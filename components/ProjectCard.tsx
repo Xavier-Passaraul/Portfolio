@@ -27,7 +27,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
     >
       <div
         onClick={() => !abierto && onToggle()}
-        className={`card ${abierto ? "open" : "closed"}`}
+        className={`pc-card ${abierto ? "pc-open" : "pc-closed"}`}
         style={
           {
             backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`,
@@ -37,7 +37,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
       >
         {/* Botón cerrar */}
         <div
-          className="close-btn"
+          className="pc-close-btn"
           onClick={(e) => {
             e.stopPropagation();
             onToggle();
@@ -48,32 +48,32 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         </div>
 
         {/* Header (siempre visible) */}
-        <div className="card-header">
+        <div className="pc-card-header">
           <div className="flex items-center gap-2 flex-wrap mb-2">
-            <span className="year">{proyecto.año}</span>
+            <span className="pc-year">{proyecto.año}</span>
             {proyecto.estado === "En desarrollo" && (
-              <span className="year text-amber-200">🚧 En desarrollo</span>
+              <span className="pc-year text-amber-200">🚧 En desarrollo</span>
             )}
           </div>
           <h2>{proyecto.titulo}</h2>
-          <p className="brief-desc">{proyecto.resumen}</p>
+          <p className="pc-brief-desc">{proyecto.resumen}</p>
         </div>
 
         {!abierto && (
-          <div className="plus-wrap">
-            <span className="plus-circle">
+          <div className="pc-plus-wrap">
+            <span className="pc-plus-circle">
               <Plus size={18} className="text-white" />
             </span>
           </div>
         )}
 
         {/* Cuerpo expandible: colapsa/expande con el truco de grid-template-rows */}
-        <div className="card-body-wrapper">
-          <div className="card-body" onClick={(e) => e.stopPropagation()}>
-            <div className="images-container">
+        <div className="pc-card-body-wrapper">
+          <div className="pc-card-body" onClick={(e) => e.stopPropagation()}>
+            <div className="pc-images-container">
               {(proyecto.capturas.length > 0 ? proyecto.capturas : [null, null, null]).map(
                 (cap, i) => (
-                  <div key={i} className="img-placeholder">
+                  <div key={i} className="pc-img-placeholder">
                     {cap ? (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img src={cap} alt="Dashboard View" />
@@ -85,24 +85,24 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
               )}
             </div>
 
-            <div className="readme-desc">
+            <div className="pc-readme-desc">
               <h3>📄 README.md</h3>
               <p>{proyecto.descripcion}</p>
             </div>
 
-            <div className="languages">
+            <div className="pc-languages">
               {proyecto.tecnologias.map((t) => (
                 <span key={t}>{t}</span>
               ))}
             </div>
 
-            <div className="actions">
+            <div className="pc-actions">
               {proyecto.linkGithub && (
                 <a
                   href={proyecto.linkGithub}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-github"
+                  className="pc-btn pc-btn-github"
                 >
                   Ver GitHub
                 </a>
@@ -112,7 +112,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
                   href={proyecto.linkDemo}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-demo"
+                  className="pc-btn pc-btn-demo"
                 >
                   Live Demo
                 </a>
@@ -122,7 +122,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
                   href={proyecto.linkWebsite}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-demo flex items-center justify-center gap-1.5"
+                  className="pc-btn pc-btn-demo flex items-center justify-center gap-1.5"
                 >
                   <Globe size={14} /> Sitio
                 </a>
@@ -132,7 +132,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
                   href={proyecto.linkDescarga}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="btn btn-demo flex items-center justify-center gap-1.5"
+                  className="pc-btn pc-btn-demo flex items-center justify-center gap-1.5"
                 >
                   <Smartphone size={14} /> APK
                 </a>
@@ -143,8 +143,9 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
       </div>
 
       <style jsx>{`
-        .card {
+        .pc-card {
           position: relative;
+          z-index: 1;
           display: flex;
           flex-direction: column;
           padding: 28px;
@@ -158,29 +159,41 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         /* --- Card cerrada: flota + gradiente en movimiento --- */
-        .card.closed {
+        .pc-card.pc-closed {
           cursor: pointer;
           aspect-ratio: 3 / 4;
           justify-content: space-between;
           animation: gradientMove 8s ease infinite, float 3s ease-in-out infinite;
         }
 
-        .card.closed:hover {
+        .pc-card.pc-closed:hover {
+          z-index: 20;
           transform: translateY(-15px) scale(1.02);
+          /* Fallback: brilla violeta en cualquier navegador, aunque no soporte color-mix() */
           box-shadow:
-            0 25px 45px color-mix(in srgb, var(--glow-color) 45%, transparent),
+            0 25px 45px rgba(122, 0, 255, 0.4),
             inset 0 0 0 1px rgba(255, 255, 255, 0.25);
           /* Sacamos "float" en hover para no pisar el transform del hover, igual que en el original */
           animation: gradientMove 8s ease infinite;
         }
 
+        /* Donde el navegador soporte color-mix(), el brillo usa el color del tema del proyecto */
+        @supports (background: color-mix(in srgb, red 50%, blue)) {
+          .pc-card.pc-closed:hover {
+            box-shadow:
+              0 25px 45px color-mix(in srgb, var(--glow-color) 45%, transparent),
+              inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+          }
+        }
+
         /* --- Card abierta: solo gradiente en movimiento --- */
-        .card.open {
+        .pc-card.pc-open {
+          z-index: 10;
           animation: gradientMove 8s ease infinite;
         }
 
         /* --- Botón cerrar (−) --- */
-        .close-btn {
+        .pc-close-btn {
           position: absolute;
           top: 20px;
           right: 20px;
@@ -203,25 +216,25 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           z-index: 10;
         }
 
-        .close-btn:hover {
+        .pc-close-btn:hover {
           background: rgba(255, 255, 255, 0.4);
           transform: rotate(0deg) scale(1.1);
         }
 
-        .card.open .close-btn {
+        .pc-card.pc-open .pc-close-btn {
           opacity: 1;
           pointer-events: auto;
           transform: rotate(0deg);
         }
 
         /* --- Header --- */
-        .card-header {
+        .pc-card-header {
           position: relative;
           z-index: 2;
           padding-right: 40px;
         }
 
-        .card-header h2 {
+        .pc-card-header h2 {
           margin: 0;
           font-size: 24px;
           font-weight: 700;
@@ -230,7 +243,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
         }
 
-        .year {
+        .pc-year {
           display: inline-block;
           background: rgba(0, 0, 0, 0.3);
           padding: 4px 10px;
@@ -241,14 +254,14 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           color: #fff;
         }
 
-        .brief-desc {
+        .pc-brief-desc {
           margin: 8px 0 0 0;
           font-size: 16px;
           line-height: 1.5;
           color: rgba(255, 255, 255, 0.9);
         }
 
-        .plus-wrap {
+        .pc-plus-wrap {
           display: flex;
           justify-content: flex-end;
           margin-top: 16px;
@@ -256,7 +269,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           z-index: 2;
         }
 
-        .plus-circle {
+        .pc-plus-circle {
           width: 36px;
           height: 36px;
           border-radius: 9999px;
@@ -268,52 +281,52 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         /* --- Cuerpo expandible: truco de grid-template-rows para animar altura --- */
-        .card-body-wrapper {
+        .pc-card-body-wrapper {
           display: grid;
           grid-template-rows: 0fr;
           transition: grid-template-rows 0.6s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        .card.open .card-body-wrapper {
+        .pc-card.pc-open .pc-card-body-wrapper {
           grid-template-rows: 1fr;
           margin-top: 24px;
           padding-top: 24px;
           border-top: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .card-body {
+        .pc-card-body {
           overflow: hidden;
           position: relative;
           z-index: 2;
         }
 
         /* Elementos internos: aparecen en cascada */
-        .card-body > div {
+        .pc-card-body > div {
           opacity: 0;
           transform: translateY(20px);
           transition: all 0.5s ease;
         }
 
-        .card.open .card-body > div {
+        .pc-card.pc-open .pc-card-body > div {
           opacity: 1;
           transform: translateY(0);
         }
 
-        .card.open .images-container {
+        .pc-card.pc-open .pc-images-container {
           transition-delay: 0.1s;
         }
-        .card.open .readme-desc {
+        .pc-card.pc-open .pc-readme-desc {
           transition-delay: 0.2s;
         }
-        .card.open .languages {
+        .pc-card.pc-open .pc-languages {
           transition-delay: 0.3s;
         }
-        .card.open .actions {
+        .pc-card.pc-open .pc-actions {
           transition-delay: 0.4s;
         }
 
         /* --- Capturas --- */
-        .images-container {
+        .pc-images-container {
           display: flex;
           flex-direction: column;
           gap: 10px;
@@ -321,12 +334,12 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         @media (min-width: 640px) {
-          .images-container {
+          .pc-images-container {
             flex-direction: row;
           }
         }
 
-        .img-placeholder {
+        .pc-img-placeholder {
           width: 100%;
           height: 96px;
           border-radius: 8px;
@@ -344,31 +357,31 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         @media (min-width: 640px) {
-          .img-placeholder {
+          .pc-img-placeholder {
             width: 33.333%;
           }
         }
 
-        .img-placeholder:hover {
+        .pc-img-placeholder:hover {
           transform: scale(1.1);
           z-index: 20;
         }
 
-        .img-placeholder img {
+        .pc-img-placeholder img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
 
         /* --- README --- */
-        .readme-desc h3 {
+        .pc-readme-desc h3 {
           margin: 0 0 10px 0;
           font-size: 18px;
           font-weight: 700;
           color: #fff;
         }
 
-        .readme-desc p {
+        .pc-readme-desc p {
           font-size: 14.5px;
           line-height: 1.6;
           color: rgba(255, 255, 255, 0.85);
@@ -376,14 +389,14 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         /* --- Tecnologías --- */
-        .languages {
+        .pc-languages {
           display: flex;
           flex-wrap: wrap;
           gap: 8px;
           margin-bottom: 24px;
         }
 
-        .languages span {
+        .pc-languages span {
           background: rgba(0, 0, 0, 0.4);
           border: 1px solid rgba(255, 255, 255, 0.1);
           padding: 6px 12px;
@@ -394,19 +407,19 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         /* --- Botones de acción --- */
-        .actions {
+        .pc-actions {
           display: flex;
           flex-direction: column;
           gap: 15px;
         }
 
         @media (min-width: 640px) {
-          .actions {
+          .pc-actions {
             flex-direction: row;
           }
         }
 
-        .btn {
+        .pc-btn {
           flex: 1;
           min-width: 120px;
           padding: 12px;
@@ -421,27 +434,27 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           letter-spacing: 1px;
         }
 
-        .btn:hover {
+        .pc-btn:hover {
           transform: translateY(-3px);
           box-shadow: 0 5px 15px rgba(0, 0, 0, 0.4);
         }
 
-        .btn-github {
+        .pc-btn-github {
           background: #24292e;
           border: 1px solid #24292e;
         }
 
-        .btn-github:hover {
+        .pc-btn-github:hover {
           background: #000;
         }
 
-        .btn-demo {
+        .pc-btn-demo {
           background: transparent;
           border: 1px solid #fff;
           backdrop-filter: blur(5px);
         }
 
-        .btn-demo:hover {
+        .pc-btn-demo:hover {
           background: #fff;
           color: #7a00ff;
         }
