@@ -17,3 +17,38 @@ body {
 .animate-blink {
   animation: blink 1s step-end infinite;
 }
+
+.card-base {
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.5),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.card-closed {
+  animation: gradientMove 8s ease infinite, float 3s ease-in-out infinite;
+}
+
+.card-closed:hover {
+  transform: translateY(-15px) scale(1.02);
+  box-shadow:
+    0 25px 45px color-mix(in srgb, var(--glow-color) 45%, transparent),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.25);
+  animation: gradientMove 8s ease infinite;
+}
+
+.card-open {
+  animation: gradientMove 8s ease infinite;
+}
+
+@keyframes gradientMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+@keyframes float {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0); }
+}
