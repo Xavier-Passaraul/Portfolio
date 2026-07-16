@@ -4,11 +4,14 @@ export interface Proyecto {
   resumen: string; // se ve en la card cerrada, 1 línea
   descripcion: string; // "README" breve, se ve al abrir la card
   tecnologias: string[];
-  colorTema: string; // hex, define la ambientación de la card (ej "#3b82f6")
+  colorTema: string; // hex, color base (se usa si no hay colorGradiente)
+  colorGradiente?: [string, string, string]; // 3 colores para el fondo animado tipo aurora
+  estado?: "Terminado" | "En desarrollo";
   año: number; // se usa para ordenar de más nuevo a más viejo
   linkGithub?: string;
   linkDemo?: string;
   linkWebsite?: string; // opcional, solo si el proyecto tiene un sitio propio
+  linkDescarga?: string; // para APKs u otros instalables
   capturas: string[]; // rutas a imágenes en /public, ej: "/proyectos/ecommerce-1.png"
 }
 
