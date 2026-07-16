@@ -155,7 +155,6 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
             0 15px 35px rgba(0, 0, 0, 0.5),
             inset 0 0 0 1px rgba(255, 255, 255, 0.2);
           transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
-          overflow: hidden;
         }
 
         /* --- Card cerrada: flota + gradiente en movimiento --- */
