@@ -23,7 +23,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
     <motion.div
       layout
       transition={{ layout: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className={`rounded-3xl overflow-hidden ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
+      className={`rounded-3xl ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
     >
       <div
         onClick={() => !abierto && onToggle()}
