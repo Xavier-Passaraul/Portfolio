@@ -21,10 +21,10 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
     // animaciones (float, gradiente, apertura, hovers) son 100% CSS, igual que
     // en el HTML original, así no dependen de que framer-motion las dispare bien.
     <motion.div
-      layout
-      transition={{ layout: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className={`rounded-3xl ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
-    >
+  layout
+  transition={{ layout: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
+  className={`relative z-0 hover:z-50 rounded-3xl ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
+>
       <div
         onClick={() => !abierto && onToggle()}
         className={`pc-card ${abierto ? "pc-open" : "pc-closed"}`}
