@@ -34,7 +34,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
       {/* Capa 2: gradiente animado + flote + hover — 100% CSS, independiente de Framer */}
       <div
         onClick={() => !abierto && onToggle()}
-        className={`relative p-7 card-gradient ${!abierto ? "cursor-pointer card-float" : ""}`}
+        className={`relative p-7 card-gradient ${!abierto ? "cursor-pointer card-hover-lift" : ""}`}
         style={{ backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`, backgroundSize: "300% 300%" }}
       >
         {/* Botón cerrar */}
@@ -177,25 +177,16 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         .card-gradient {
           animation: gradientMove 8s ease infinite;
         }
-        .card-float {
-          animation:
-            gradientMove 8s ease infinite,
-            cardFloat 3s ease-in-out infinite;
+        .card-hover-lift {
           transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
-        .card-float:hover {
-          animation-play-state: paused, paused;
-          transform: translateY(-10px) scale(1.015);
+        .card-hover-lift:hover {
+          transform: translateY(-8px) scale(1.015);
         }
         @keyframes gradientMove {
           0% { background-position: 0% 50%; }
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
-        }
-        @keyframes cardFloat {
-          0% { transform: translateY(0); }
-          50% { transform: translateY(-8px); }
-          100% { transform: translateY(0); }
         }
       `}</style>
     </motion.div>
