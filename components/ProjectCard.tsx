@@ -29,34 +29,33 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
     <motion.div
       layout
       transition={{ layout: { duration: 0.4, ease: [0.16, 1, 0.3, 1] } }}
-      className={`rounded-3xl overflow-hidden ring-1 ring-white/10 shadow-[0_15px_35px_rgba(0,0,0,0.45)] ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
+      className={`rounded-3xl overflow-hidden ${abierto ? "sm:col-span-2 lg:col-span-3" : ""}`}
     >
       {/* Capa 2: gradiente animado + flote + hover — 100% CSS, independiente de Framer */}
       <div
         onClick={() => !abierto && onToggle()}
-        className={`relative p-7 card-gradient flex flex-col ${!abierto ? "cursor-pointer card-hover-lift aspect-[3/4] justify-between" : ""}`}
-        style={{ backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`, backgroundSize: "300% 300%" }}
+        className={`relative p-7 card-gradient card-shadow flex flex-col ${!abierto ? "cursor-pointer card-hover-lift aspect-[3/4] justify-between" : ""}`}
+        style={{
+          backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`,
+          backgroundSize: "300% 300%",
+          ["--glow-color" as string]: proyecto.colorTema,
+        }}
       >
-        {/* Botón cerrar */}
-        <AnimatePresence>
-          {abierto && (
-            <motion.button
-              initial={{ opacity: 0, rotate: 90, scale: 0.8 }}
-              animate={{ opacity: 1, rotate: 0, scale: 1 }}
-              exit={{ opacity: 0, rotate: 90, scale: 0.8 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-              whileHover={{ scale: 1.1 }}
-              onClick={(e) => {
-                e.stopPropagation();
-                onToggle();
-              }}
-              aria-label="Cerrar"
-              className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-2xl font-bold leading-none hover:bg-white/30 transition-colors"
-            >
-              −
-            </motion.button>
-          )}
-        </AnimatePresence>
+        {/* Botón cerrar — siempre montado, solo anima sus propiedades (igual que el original) */}
+        <motion.button
+          animate={{ opacity: abierto ? 1 : 0, rotate: abierto ? 0 : 90 }}
+          whileHover={abierto ? { scale: 1.1 } : {}}
+          transition={{ duration: 0.4, ease: "easeOut" }}
+          style={{ pointerEvents: abierto ? "auto" : "none" }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onToggle();
+          }}
+          aria-label="Cerrar"
+          className="absolute top-5 right-5 z-10 w-9 h-9 rounded-full bg-white/15 backdrop-blur-sm flex items-center justify-center text-2xl font-bold leading-none hover:bg-white/30 transition-colors cursor-pointer"
+        >
+          −
+        </motion.button>
 
         {/* Header */}
         <div className="relative pr-10">
@@ -188,11 +187,21 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         .card-gradient {
           animation: gradientMove 8s ease infinite;
         }
+        .card-shadow {
+          box-shadow:
+            0 15px 35px rgba(0, 0, 0, 0.5),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
         .card-hover-lift {
-          transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+          transition:
+            transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1),
+            box-shadow 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
         }
         .card-hover-lift:hover {
-          transform: translateY(-8px) scale(1.015);
+          transform: translateY(-15px) scale(1.02);
+          box-shadow:
+            0 25px 45px color-mix(in srgb, var(--glow-color) 45%, transparent),
+            inset 0 0 0 1px rgba(255, 255, 255, 0.25);
         }
         @keyframes gradientMove {
           0% { background-position: 0% 50%; }
