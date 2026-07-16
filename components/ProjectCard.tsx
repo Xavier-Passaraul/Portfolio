@@ -1,5 +1,6 @@
 "use client";
 
+import type { CSSProperties } from "react";
 import { motion } from "framer-motion";
 import { Plus, Globe, Smartphone } from "lucide-react";
 import type { Proyecto } from "@/lib/proyectosData";
@@ -27,10 +28,12 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
       <div
         onClick={() => !abierto && onToggle()}
         className={`card ${abierto ? "open" : "closed"}`}
-        style={{
-          backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`,
-          ["--glow-color" as string]: proyecto.colorTema,
-        }}
+        style={
+          {
+            backgroundImage: `linear-gradient(135deg, ${c1}, ${c2}, ${c3})`,
+            "--glow-color": proyecto.colorTema,
+          } as CSSProperties
+        }
       >
         {/* Botón cerrar */}
         <div
