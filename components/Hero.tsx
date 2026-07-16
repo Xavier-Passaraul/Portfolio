@@ -68,7 +68,7 @@ export default function Hero() {
             transition={{ delay: 0.6, duration: 0.6 }}
             className="flex gap-4 justify-center md:justify-start mt-8"
           >
-            <a href="#proyectos" className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors hover:shadow-[0_0_15px_rgba(37,99,235,0.5)]">
+            <a href="/proyectos" className="px-6 py-3 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-lg transition-colors hover:shadow-[0_0_15px_rgba(37,99,235,0.5)]">
               Ver Proyectos
             </a>
             <a href="#contacto" className="px-6 py-3 bg-[#0f172a] border border-slate-600 hover:border-slate-400 text-slate-300 font-medium rounded-lg transition-colors">
