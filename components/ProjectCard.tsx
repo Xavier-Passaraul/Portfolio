@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, Variants } from "framer-motion";
 import { Plus, Globe, Smartphone } from "lucide-react";
 import type { Proyecto } from "@/lib/proyectosData";
 
@@ -11,13 +11,13 @@ interface Props {
 }
 
 // Controla el delay en cascada (0.1s entre cada hijo) para igualar el CSS original
-const contenedorVariants = {
+const contenedorVariants: Variants = {
   hidden: {},
   visible: { transition: { staggerChildren: 0.1, delayChildren: 0.05 } },
 };
 
 // Recrea la entrada: opacity 0 -> 1 y translateY(20px) -> 0
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
   visible: { opacity: 1, y: 0, transition: { duration: 0.5, ease: "easeOut" } },
 };
