@@ -40,7 +40,7 @@ export default function Hero() {
       <DnaHelix />
 
       {/* Vignette hacia los bordes, para que el ADN se funda con el resto de la página */}
-      <div className="absolute inset-0 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_40%,_#0f172a_95%)]" />
+      <div className="absolute top-0 bottom-0 left-1/2 w-screen -translate-x-1/2 z-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_40%,_#0f172a_95%)]" />
 
       {/* Contenido: grid de 2 columnas */}
       <div className="relative z-10 w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
