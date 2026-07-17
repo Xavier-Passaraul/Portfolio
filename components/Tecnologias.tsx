@@ -16,7 +16,7 @@ import {
   SiGit,
 } from "react-icons/si";
 import type { IconType } from "react-icons";
-import { motion } from "framer-motion";
+import { motion, type Variants } from "framer-motion";
 
 interface Tech {
   nombre: string;
@@ -62,7 +62,7 @@ const categorias: Categoria[] = [
 ];
 
 // Animaciones para Framer Motion
-const containerVariants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -72,12 +72,12 @@ const containerVariants = {
   },
 };
 
-const itemVariants = {
+const itemVariants: Variants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { 
-    opacity: 1, 
-    y: 0, 
-    transition: { type: "spring", stiffness: 100, damping: 12 } 
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", stiffness: 100, damping: 12 },
   },
 };
 
