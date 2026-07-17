@@ -1,12 +1,19 @@
+export interface CasoDeEstudio {
+  problema: string; // qué necesidad o dolor real motivó el proyecto
+  solucion: string; // qué se construyó y cómo resuelve ese problema
+  resultado: string; // estado actual / logro técnico concreto
+}
+
 export interface Proyecto {
   id: string;
   titulo: string;
   resumen: string; // se ve en la card cerrada, 1 línea
-  descripcion: string; // "README" breve, se ve al abrir la card
+  caso: CasoDeEstudio; // mini case-study, se ve al abrir la card
   tecnologias: string[];
   colorTema: string; // hex, color base (se usa si no hay colorGradiente)
   colorGradiente?: [string, string, string]; // 3 colores para el fondo animado tipo aurora
   estado?: "Terminado" | "En desarrollo";
+  dificultad?: string; // ej: "Alta (8.5/10)" — opcional, solo si hay una estimación real
   año: number; // se usa para ordenar de más nuevo a más viejo
   linkGithub?: string;
   linkDemo?: string;
@@ -15,14 +22,21 @@ export interface Proyecto {
   capturas: string[]; // rutas a imágenes en /public, ej: "/proyectos/ecommerce-1.png"
 }
 
+
 export const proyectos: Proyecto[] = [
   {
     id: "luma-studio",
     titulo: "Luma Studio",
     resumen:
       "Plataforma todo-en-uno para crear y editar mockups profesionales de dispositivos.",
-    descripcion:
-      "Plataforma avanzada para la creación y edición de mockups profesionales de dispositivos: editor de mockups con perspectiva y múltiples pantallas, editor de imágenes con canvas y capas, editor de templates, gestión de brand kits, sistema de capturas y exportación por lotes. Flujo completo: captura de pantalla → edición avanzada → generación de mockups → exportación.",
+    caso: {
+      problema:
+        "Diseñadores y marketers necesitan mostrar sus productos digitales en dispositivos reales para presentaciones y redes, pero armar esos mockups a mano en un editor de imágenes es lento y repetitivo.",
+      solucion:
+        "Un editor todo-en-uno: capturas de pantalla → edición con canvas y capas → generador de mockups con perspectiva y múltiples pantallas → exportación por lotes, con gestión de brand kits para mantener consistencia entre piezas.",
+      resultado:
+        "Motor de renderizado de perspectivas y colas de procesamiento para exports pesados, corriendo sobre Node.js con Prisma/PostgreSQL y storage de imágenes en Supabase. Sigue en desarrollo activo.",
+    },
     tecnologias: [
       "React",
       "TypeScript",
@@ -39,6 +53,7 @@ export const proyectos: Proyecto[] = [
     colorTema: "#a855f7",
     colorGradiente: ["#a855f7", "#ec4899", "#6366f1"],
     estado: "En desarrollo",
+    dificultad: "Alta (8.5/10)",
     año: 2026,
     capturas: [],
   },
@@ -47,8 +62,14 @@ export const proyectos: Proyecto[] = [
     titulo: "CloudSync",
     resumen:
       "Sincronización de archivos en la nube con chats en tiempo real, estilo Dropbox colaborativo.",
-    descripcion:
-      "Aplicación full-stack de sincronización de archivos en la nube (estilo Dropbox / Google Drive simplificado) con funcionalidades sociales: sistema de carpetas, chats en tiempo real dentro de carpetas o entre usuarios, autenticación completa, perfiles de usuario, subida de archivos con notificaciones push y soporte móvil nativo en Android. Pensada para equipos pequeños, estudiantes o uso personal.",
+    caso: {
+      problema:
+        "Compartir archivos entre equipos, estudiantes o amigos suele significar saltar entre una app de almacenamiento y otra de chat, perdiendo contexto sobre qué archivo se está discutiendo.",
+      solucion:
+        "Una app full-stack que combina sincronización de archivos en carpetas (estilo Drive) con chats en tiempo real dentro de cada carpeta o entre usuarios, con autenticación completa, notificaciones push y una app nativa para Android vía Capacitor.",
+      resultado:
+        "Sistema de carpetas, subida de archivos con notificaciones automáticas y mensajería en tiempo real funcionando sobre Supabase (Auth, Storage, Realtime y Edge Functions), con despliegue móvil listo.",
+    },
     tecnologias: [
       "React",
       "TypeScript",
@@ -61,6 +82,7 @@ export const proyectos: Proyecto[] = [
     colorTema: "#3b82f6",
     colorGradiente: ["#3b82f6", "#06b6d4", "#8b5cf6"],
     estado: "Terminado",
+    dificultad: "Media-Alta (7.5/10)",
     año: 2026,
     capturas: [],
   },
@@ -69,8 +91,14 @@ export const proyectos: Proyecto[] = [
     titulo: "VaultPass",
     resumen:
       "Gestor de contraseñas seguro con encriptación end-to-end y sincronización entre dispositivos.",
-    descripcion:
-      "Gestor de contraseñas completo y seguro que permite almacenar, organizar y autocompletar credenciales de forma encriptada. Incluye generador de contraseñas fuertes, organización por categorías, sincronización segura entre dispositivos, interfaz moderna y soporte móvil nativo. Enfoque principal en seguridad (encriptación end-to-end) y experiencia de usuario. Proyecto completo y funcional.",
+    caso: {
+      problema:
+        "Reutilizar contraseñas o guardarlas en notas sueltas es uno de los errores de seguridad más comunes, pero muchos gestores de contraseñas se sienten complicados o poco confiables para el usuario final.",
+      solucion:
+        "Un gestor con almacenamiento encriptado de credenciales, generador de contraseñas fuertes, organización por categorías y sincronización segura entre dispositivos, con una interfaz simple y móvil nativo vía Capacitor.",
+      resultado:
+        "Proyecto completo y funcional, con foco explícito en criptografía y encriptación end-to-end por sobre features accesorias.",
+    },
     tecnologias: [
       "React",
       "TypeScript",
@@ -83,6 +111,7 @@ export const proyectos: Proyecto[] = [
     colorTema: "#10b981",
     colorGradiente: ["#10b981", "#0d9488", "#1e293b"],
     estado: "Terminado",
+    dificultad: "Media-Alta (7/10)",
     año: 2026,
     capturas: [],
   },
@@ -91,8 +120,14 @@ export const proyectos: Proyecto[] = [
     titulo: "MiSuperGO",
     resumen:
       "App móvil de compras inteligentes: escaneo de productos, comparación de precios y comunidad.",
-    descripcion:
-      "Aplicación móvil para compras inteligentes y comunidad de supermercados. Permite escanear productos, comparar precios, gestionar listas y conectar con otros usuarios locales. Incluye buscador y categorías de productos, calculadora de compras, supermercado favorito, mapa de comunidad con geolocalización y una sección social para coincidencia de productos entre usuarios.",
+    caso: {
+      problema:
+        "Comparar precios entre supermercados y armar la lista de compras implica abrir varias apps o folletos distintos, sin forma de compartir hallazgos con gente cerca.",
+      solucion:
+        "Una app móvil que combina escaneo de código de barras, comparación de precios, listas de compras y una capa social/geolocalizada para conectar con usuarios de la misma zona.",
+      resultado:
+        "Integración de cámara, GPS y mapas sobre React + Capacitor, con backend completo en Supabase. Funcional, con foco en ahorro real para el usuario.",
+    },
     tecnologias: [
       "React",
       "TypeScript",
@@ -106,6 +141,7 @@ export const proyectos: Proyecto[] = [
     colorTema: "#22c55e",
     colorGradiente: ["#22c55e", "#eab308", "#84cc16"],
     estado: "Terminado",
+    dificultad: "Media (6.5/10)",
     año: 2025,
     capturas: [],
   },
@@ -114,8 +150,14 @@ export const proyectos: Proyecto[] = [
     titulo: "Synapse",
     resumen:
       "Sistema ligero para usar cualquier dispositivo como segunda pantalla de forma inalámbrica.",
-    descripcion:
-      "Sistema para mirroring y gestión de pantallas secundarias sin necesidad de software pesado. Compuesto por un mirror para transmitir pantalla, un receiver como aplicación web progresiva (PWA), un dashboard de control y sincronización local y en la nube con soporte multi-display. Ya cumple su función principal, aunque sigue en desarrollo activo.",
+    caso: {
+      problema:
+        "Usar un segundo dispositivo como pantalla extendida suele requerir instalar software pesado y configurar drivers, poco práctico para un uso rápido y puntual.",
+      solucion:
+        "Un sistema liviano de mirroring: un emisor que transmite la pantalla, un receiver como PWA sin instalación y un dashboard de control, con sincronización local y en la nube.",
+      resultado:
+        "Streaming funcional entre dispositivos con Node.js y soporte multi-display. Ya cumple su función principal; el mayor desafío sigue siendo la latencia y la compatibilidad cross-device.",
+    },
     tecnologias: [
       "Node.js",
       "JavaScript",
@@ -128,6 +170,7 @@ export const proyectos: Proyecto[] = [
     colorTema: "#6366f1",
     colorGradiente: ["#6366f1", "#3b82f6", "#8b5cf6"],
     estado: "En desarrollo",
+    dificultad: "Media (6/10)",
     año: 2025,
     capturas: [],
   },
@@ -136,8 +179,14 @@ export const proyectos: Proyecto[] = [
     titulo: "Amane",
     resumen:
       "Ecosistema de bienestar: sitio web público más sistema interno de gestión de clientes.",
-    descripcion:
-      "Ecosistema completo para un negocio de bienestar. Amane New es el sitio web público orientado a clientes, con secciones de masajes, rutinas, productos, hidratación y sobre nosotros. El Registro de Clientes V28 es el sistema interno/administrativo (CRM básico), ya en una versión madura, para gestionar los registros de clientes.",
+    caso: {
+      problema:
+        "Un centro de bienestar necesitaba tanto una cara pública para atraer clientes como una forma ordenada de gestionar sus registros internamente, sin depender de planillas sueltas.",
+      solucion:
+        "Un ecosistema de dos partes: Amane New, el sitio web público con la oferta de servicios (masajes, rutinas, productos, hidratación), y un CRM interno para administrar el registro de clientes.",
+      resultado:
+        "Sistema interno ya en su versión V28, una base madura y probada en uso real para la gestión diaria de clientes.",
+    },
     tecnologias: [
       "HTML",
       "CSS",

@@ -54,6 +54,9 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
             {proyecto.estado === "En desarrollo" && (
               <span className="pc-year text-amber-200">🚧 En desarrollo</span>
             )}
+            {proyecto.dificultad && (
+              <span className="pc-year">⚙ Dificultad: {proyecto.dificultad}</span>
+            )}
           </div>
           <h2>{proyecto.titulo}</h2>
           <p className="pc-brief-desc">{proyecto.resumen}</p>
@@ -87,7 +90,18 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
 
             <div className="pc-readme-desc">
               <h3>📄 README.md</h3>
-              <p>{proyecto.descripcion}</p>
+              <div className="pc-caso-block">
+                <span className="pc-caso-label">// problema</span>
+                <p>{proyecto.caso.problema}</p>
+              </div>
+              <div className="pc-caso-block">
+                <span className="pc-caso-label">// solución</span>
+                <p>{proyecto.caso.solucion}</p>
+              </div>
+              <div className="pc-caso-block">
+                <span className="pc-caso-label">// resultado</span>
+                <p>{proyecto.caso.resultado}</p>
+              </div>
             </div>
 
             <div className="pc-languages">
@@ -170,7 +184,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
           transform: translateY(-15px) scale(1.02);
           /* Fallback: brilla violeta en cualquier navegador, aunque no soporte color-mix() */
           box-shadow:
-            0 25px 45px rgba(122, 0, 255, 0.4),
+            0 0 45px 8px rgba(122, 0, 255, 0.45),
             inset 0 0 0 1px rgba(255, 255, 255, 0.25);
           /* Sacamos "float" en hover para no pisar el transform del hover, igual que en el original */
           animation: gradientMove 8s ease infinite;
@@ -180,7 +194,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         @supports (background: color-mix(in srgb, red 50%, blue)) {
           .pc-card.pc-closed:hover {
             box-shadow:
-              0 25px 45px color-mix(in srgb, var(--glow-color) 45%, transparent),
+              0 0 45px 8px color-mix(in srgb, var(--glow-color) 55%, transparent),
               inset 0 0 0 1px rgba(255, 255, 255, 0.25);
           }
         }
@@ -374,10 +388,28 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
 
         /* --- README --- */
         .pc-readme-desc h3 {
-          margin: 0 0 10px 0;
+          margin: 0 0 14px 0;
           font-size: 18px;
           font-weight: 700;
           color: #fff;
+        }
+
+        .pc-caso-block {
+          margin-bottom: 14px;
+        }
+
+        .pc-caso-block:last-child {
+          margin-bottom: 0;
+        }
+
+        .pc-caso-label {
+          display: block;
+          font-family: var(--font-mono, ui-monospace, "SF Mono", "Fira Code", monospace);
+          font-size: 11.5px;
+          font-weight: 600;
+          letter-spacing: 0.02em;
+          color: #6a9955; /* mismo verde de comentario que TerminalCode */
+          margin-bottom: 4px;
         }
 
         .pc-readme-desc p {
