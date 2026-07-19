@@ -219,10 +219,6 @@ export default function Tecnologias() {
 
         #tecnologias .tech-chip.c-pink:hover { border-color: #ff007f; background: rgba(255, 0, 127, 0.1); box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); color: #fff; }
         #tecnologias .tech-chip.c-pink:hover svg { color: #ff007f; }
-
-        @media (prefers-reduced-motion: reduce) {
-            #tecnologias .b1, #tecnologias .b2, #tecnologias .b3 { animation: none !important; }
-        }
       `}</style>
 
       <div className="tec-container">
