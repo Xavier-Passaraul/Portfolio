@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect } from "react";
 import {
   SiReact,
   SiTypescript,
@@ -25,14 +28,14 @@ interface Tech {
 
 interface Categoria {
   titulo: string;
-  colorClass: "c-blue" | "c-green" | "c-pink";
+  colorClass: "c-cyan" | "c-green" | "c-pink";
   tecnologias: Tech[];
 }
 
 const categorias: Categoria[] = [
   {
     titulo: "// frontend",
-    colorClass: "c-blue",
+    colorClass: "c-cyan",
     tecnologias: [
       { nombre: "React", Icono: SiReact },
       { nombre: "TypeScript", Icono: SiTypescript },
@@ -65,157 +68,187 @@ const categorias: Categoria[] = [
   },
 ];
 
-// Helper para pasar variables CSS custom (--i, --catDelay) tipadas sin pelear con CSSProperties
+// Helper para pasar variables CSS custom (--i) tipadas sin pelear con CSSProperties
 const cssVars = (vars: Record<string, string | number>): CSSProperties =>
   vars as CSSProperties;
 
 export default function Tecnologias() {
+  // Misma fuente (Fira Code) que usa el terminal-header de Contacto.
+  useEffect(() => {
+    if (document.getElementById("fira-code-font")) return;
+    const fontLink = document.createElement("link");
+    fontLink.id = "fira-code-font";
+    fontLink.href =
+      "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap";
+    fontLink.rel = "stylesheet";
+    document.head.appendChild(fontLink);
+  }, []);
+
   return (
-    <section id="tecnologias" className="relative py-24 bg-[#09090b] overflow-hidden">
+    <section id="tecnologias" className="py-24 bg-[#09090b]">
       <style>{`
+        #tecnologias .tec-container {
+            width: 100%;
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            perspective: 1200px;
+        }
+
         /* ==========================================
-           1. ORBES FLOTANDO (mismo enfoque que los blobs de Contacto)
+           1. ORBES DE LUZ (idénticos a los de Contacto)
            ========================================== */
-        #tecnologias .tec-blob {
+        #tecnologias .bg-blobs {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(120px);
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
             pointer-events: none;
         }
-        #tecnologias .tec-blob-1 {
-            top: 0;
-            left: 25%;
-            width: 500px;
-            height: 500px;
-            background: rgba(37, 99, 235, 0.2);
+
+        #tecnologias .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(60px);
+            opacity: 0.8;
             mix-blend-mode: screen;
-            animation: tecFloat1 10s infinite alternate ease-in-out;
         }
-        #tecnologias .tec-blob-2 {
-            bottom: 0;
-            right: 25%;
-            width: 400px;
-            height: 400px;
-            background: rgba(5, 150, 105, 0.1);
-            mix-blend-mode: screen;
-            filter: blur(100px);
-            animation: tecFloat2 12s infinite alternate ease-in-out;
-        }
+
+        #tecnologias .b1 { width: 400px; height: 400px; background: #ff007f; top: -10%; left: -10%; animation: tecFloat1 8s infinite alternate ease-in-out; }
+        #tecnologias .b2 { width: 350px; height: 350px; background: #00f0ff; bottom: -10%; right: -10%; animation: tecFloat2 11s infinite alternate ease-in-out; }
+        #tecnologias .b3 { width: 300px; height: 300px; background: #39ff14; top: 30%; left: 30%; animation: tecFloat3 9s infinite alternate ease-in-out; }
 
         @keyframes tecFloat1 {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(80px, 60px) scale(1.15); }
-            100% { transform: translate(-40px, 120px) scale(0.95); }
+            50% { transform: translate(150px, 100px) scale(1.2); }
+            100% { transform: translate(-50px, 200px) scale(0.9); }
         }
         @keyframes tecFloat2 {
             0% { transform: translate(0, 0) scale(1); }
-            50% { transform: translate(-90px, -50px) scale(1.2); }
-            100% { transform: translate(30px, -110px) scale(1); }
+            50% { transform: translate(-200px, -150px) scale(1.3); }
+            100% { transform: translate(-50px, -300px) scale(1); }
+        }
+        @keyframes tecFloat3 {
+            0% { transform: translate(0, 0) scale(1); }
+            50% { transform: translate(200px, -100px) scale(0.8); }
+            100% { transform: translate(-150px, 150px) scale(1.4); }
         }
 
         /* ==========================================
-           2. CARD LIQUID GLASS (mismo tilt 3D que .liquid-card de Contacto)
+           2. LIQUID GLASS (mismos valores que .liquid-card)
            ========================================== */
-        #tecnologias .tec-card {
+        #tecnologias .liquid-card {
             position: relative;
             z-index: 10;
-            border-radius: 12px;
-            overflow: hidden;
-            background: rgba(30, 30, 30, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.6s ease;
+            background: rgba(15, 15, 20, 0.25);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.2);
+            transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             transform-style: preserve-3d;
-            animation: tecFadeUp 0.6s ease both;
-        }
-        #tecnologias .tec-card:hover {
-            transform: rotateX(1.5deg) rotateY(-1.5deg);
+            overflow: hidden;
         }
 
-        @keyframes tecFadeUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+        #tecnologias .liquid-card:hover {
+            transform: rotateX(2deg) rotateY(-2deg);
         }
 
         /* ==========================================
-           3. ENTRADA EN CASCADA (categorías y chips)
+           3. TERMINAL HEADER (idéntico a Contacto)
            ========================================== */
-        #tecnologias .tec-intro {
-            animation: tecFadeIn 0.6s ease 0.15s both;
-        }
-        @keyframes tecFadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        #tecnologias .tec-category {
-            animation: tecFadeUp 0.6s ease both;
-            animation-delay: calc(var(--catDelay, 0s) + 0.2s);
+        #tecnologias .terminal-header {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: rgba(0,0,0,0.25);
         }
 
-        #tecnologias .tech-chip {
-            animation: tecFadeUp 0.45s ease both;
-            animation-delay: calc(var(--catDelay, 0s) + (var(--i, 0) * 0.05s) + 0.4s);
+        #tecnologias .dots { display: flex; gap: 8px; margin-right: 20px; }
+        #tecnologias .dot { width: 12px; height: 12px; border-radius: 50%; }
+
+        #tecnologias .terminal-path {
+            font-family: 'Fira Code', monospace;
+            color: #fff;
+            font-size: 0.9rem;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            gap: 6px;
         }
 
         /* ==========================================
-           4. HOVER NEÓN DE LOS CHIPS (mismo enfoque que .contact-btn de Contacto)
+           4. CHIPS DE TECNOLOGÍA (mismo lenguaje visual que .contact-btn)
            ========================================== */
+        #tecnologias .tec-body { padding: 30px; }
+
+        @media (min-width: 768px) {
+            #tecnologias .tec-body { padding: 48px; }
+        }
+
         #tecnologias .tech-chip {
-            transition: transform 0.3s ease, background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 18px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: rgba(255,255,255,0.85);
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: default;
         }
-        #tecnologias .tech-chip:hover {
-            transform: translateY(-2px) scale(1.05);
-        }
-        #tecnologias .tech-chip svg { transition: transform 0.3s ease, color 0.3s ease; }
-        #tecnologias .tech-chip:hover svg { transform: scale(1.15); }
 
-        #tecnologias .tech-chip.c-blue:hover { border-color: #3b82f6; background: rgba(59, 130, 246, 0.12); box-shadow: 0 0 20px rgba(59, 130, 246, 0.25); color: #93c5fd; }
-        #tecnologias .tech-chip.c-blue:hover svg { color: #60a5fa; }
+        #tecnologias .tech-chip svg { font-size: 1.1rem; transition: transform 0.3s ease, color 0.3s ease; color: #94a3b8; }
 
-        #tecnologias .tech-chip.c-green:hover { border-color: #10b981; background: rgba(16, 185, 129, 0.12); box-shadow: 0 0 20px rgba(16, 185, 129, 0.25); color: #6ee7b7; }
-        #tecnologias .tech-chip.c-green:hover svg { color: #34d399; }
+        #tecnologias .tech-chip:hover { transform: translateY(-3px); }
+        #tecnologias .tech-chip:hover svg { transform: scale(1.2); }
 
-        #tecnologias .tech-chip.c-pink:hover { border-color: #ec4899; background: rgba(236, 72, 153, 0.12); box-shadow: 0 0 20px rgba(236, 72, 153, 0.25); color: #f9a8d4; }
-        #tecnologias .tech-chip.c-pink:hover svg { color: #f472b6; }
+        #tecnologias .tech-chip.c-cyan:hover { border-color: #00f0ff; background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); color: #fff; }
+        #tecnologias .tech-chip.c-cyan:hover svg { color: #00f0ff; }
+
+        #tecnologias .tech-chip.c-green:hover { border-color: #39ff14; background: rgba(57, 255, 20, 0.1); box-shadow: 0 0 20px rgba(57, 255, 20, 0.3); color: #fff; }
+        #tecnologias .tech-chip.c-green:hover svg { color: #39ff14; }
+
+        #tecnologias .tech-chip.c-pink:hover { border-color: #ff007f; background: rgba(255, 0, 127, 0.1); box-shadow: 0 0 20px rgba(255, 0, 127, 0.3); color: #fff; }
+        #tecnologias .tech-chip.c-pink:hover svg { color: #ff007f; }
 
         @media (prefers-reduced-motion: reduce) {
-            #tecnologias .tec-blob-1,
-            #tecnologias .tec-blob-2,
-            #tecnologias .tec-card,
-            #tecnologias .tec-intro,
-            #tecnologias .tec-category,
-            #tecnologias .tech-chip {
-                animation: none !important;
-            }
+            #tecnologias .b1, #tecnologias .b2, #tecnologias .b3 { animation: none !important; }
         }
       `}</style>
 
-      {/* Efecto "Liquid" - Orbes de luz en el fondo */}
-      <div className="tec-blob tec-blob-1" />
-      <div className="tec-blob tec-blob-2" />
+      <div className="tec-container">
+        {/* Fondo animado */}
+        <div className="bg-blobs">
+          <div className="blob b1" />
+          <div className="blob b2" />
+          <div className="blob b3" />
+        </div>
 
-      <div className="max-w-4xl mx-auto px-4 relative z-10">
-        {/* Contenedor Terminal + Liquid Glass */}
-        <div className="tec-card">
-          {/* Header de la Terminal (Estilo VS Code / macOS) */}
-          <div className="flex items-center px-4 py-3 bg-black/40 border-b border-white/5">
-            <div className="flex gap-2">
-              <div className="w-3 h-3 rounded-full bg-red-500/80 shadow-[0_0_8px_rgba(239,68,68,0.5)]" />
-              <div className="w-3 h-3 rounded-full bg-yellow-500/80 shadow-[0_0_8px_rgba(234,179,8,0.5)]" />
-              <div className="w-3 h-3 rounded-full bg-green-500/80 shadow-[0_0_8px_rgba(34,197,94,0.5)]" />
+        {/* Cristal principal */}
+        <div className="liquid-card">
+          <div className="terminal-header">
+            <div className="dots">
+              <div className="dot" style={{ background: "#ff5f56" }} />
+              <div className="dot" style={{ background: "#ffbd2e" }} />
+              <div className="dot" style={{ background: "#27c93f" }} />
             </div>
-            <div className="mx-auto flex items-center gap-2 text-slate-400 font-mono text-xs">
-              <SiTypescript size={12} className="text-blue-400" />
-              <span>tecnologias.tsx</span>
-            </div>
+            <span className="terminal-path">
+              <SiTypescript size={12} style={{ color: "#00f0ff" }} />
+              ~/tecnologias/stack.tsx
+            </span>
           </div>
 
-          {/* Cuerpo de la Terminal */}
-          <div className="p-8 md:p-12">
-            <div className="tec-intro mb-10 font-mono">
+          <div className="tec-body">
+            <div className="mb-10 font-mono" style={{ fontFamily: "'Fira Code', monospace" }}>
               <span className="text-pink-500">const</span>{" "}
               <span className="text-blue-400">stack</span>{" "}
               <span className="text-slate-300">=</span>{" "}
@@ -225,12 +258,8 @@ export default function Tecnologias() {
             </div>
 
             <div className="flex flex-col gap-10">
-              {categorias.map((categoria, catIndex) => (
-                <div
-                  key={categoria.titulo}
-                  className="tec-category"
-                  style={cssVars({ "--catDelay": `${catIndex * 0.15}s` })}
-                >
+              {categorias.map((categoria) => (
+                <div key={categoria.titulo}>
                   <p className="font-mono text-sm tracking-wide text-[#6a9955] mb-5">
                     {categoria.titulo}
                   </p>
@@ -238,11 +267,11 @@ export default function Tecnologias() {
                     {categoria.tecnologias.map(({ nombre, Icono }, i) => (
                       <span
                         key={nombre}
-                        className={`tech-chip ${categoria.colorClass} group flex items-center gap-2 px-4 py-2.5 bg-white/5 border border-white/10 text-slate-300 font-medium rounded-lg cursor-default`}
+                        className={`tech-chip ${categoria.colorClass}`}
                         style={cssVars({ "--i": i })}
                       >
-                        <Icono size={18} className="text-slate-400" />
-                        <span className="text-sm tracking-wide">{nombre}</span>
+                        <Icono size={18} />
+                        <span>{nombre}</span>
                       </span>
                     ))}
                   </div>
