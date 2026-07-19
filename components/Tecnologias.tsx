@@ -85,7 +85,7 @@ export default function Tecnologias() {
   }, []);
 
   return (
-    <section id="tecnologias" className="py-24 bg-[#09090b]">
+    <section id="tecnologias" className="py-24">
       <style>{`
         #tecnologias .tec-container {
             width: 100%;
