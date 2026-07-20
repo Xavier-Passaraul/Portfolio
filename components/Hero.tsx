@@ -36,7 +36,7 @@ export default function Hero() {
   return (
     <section
       id="hero-section"
-      className="relative min-h-screen flex items-center overflow-hidden px-4 py-24"
+      className="relative min-h-screen flex items-center overflow-hidden pl-20 pr-4 md:pl-56 md:pr-4 py-24"
     >
       {/* Estilos inyectados compartidos (Blobs, Liquid Card y Botones) */}
       <style>{`

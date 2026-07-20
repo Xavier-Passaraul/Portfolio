@@ -248,8 +248,10 @@ export default function FondoAnimado() {
     <div className="fixed inset-0 -z-10 pointer-events-none">
       {/* El canvas captura el espacio pero deja pasar los clicks gracias al contenedor pointer-events-none */}
       <canvas ref={canvasRef} className="absolute inset-0" />
-      {/* Viñeta oscura radial para fusionar suavemente los bordes con el resto de la web */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,#0a0a0e_90%)]" />
+      {/* Fundido solo hacia abajo, para mezclar suavemente con la siguiente sección.
+          (Antes era una viñeta radial que también oscurecía la parte de ARRIBA,
+          tapando la animación justo donde está el navbar — se saca esa parte). */}
+      <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-b from-transparent to-[#0a0a0e]" />
     </div>
   );
 }
