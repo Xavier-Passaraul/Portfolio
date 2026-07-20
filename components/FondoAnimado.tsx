@@ -11,13 +11,6 @@ export default function FondoAnimado() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Si la persona activó "reducir movimiento" en su sistema, no animamos nada:
-    // dejamos solo el fondo oscuro + viñeta (ya presentes en el JSX) sin gastar CPU/GPU.
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReducedMotion) return;
-
     let particlesArray: Particle[] = [];
     let animationFrameId: number;
     let isRunning = true;
