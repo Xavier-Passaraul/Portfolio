@@ -11,16 +11,28 @@ export default function FondoAnimado() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Si la persona activó "reducir movimiento" en su sistema, no animamos nada:
+    // dejamos solo el fondo oscuro + viñeta (ya presentes en el JSX) sin gastar CPU/GPU.
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
     let particlesArray: Particle[] = [];
     let animationFrameId: number;
+    let isRunning = true;
 
-    // Configuración para pantallas Retina (alta definición)
+    // DPR limitado a 2: en pantallas 3x/4x no aporta nitidez perceptible
+    // y cuadriplica/nonuplica los píxeles a dibujar en cada frame.
+    const getDpr = () => Math.min(window.devicePixelRatio || 1, 2);
+
     const setCanvasSize = () => {
-      const dpr = window.devicePixelRatio || 1;
+      const dpr = getDpr();
       canvas.width = window.innerWidth * dpr;
       canvas.height = window.innerHeight * dpr;
       canvas.style.width = `${window.innerWidth}px`;
       canvas.style.height = `${window.innerHeight}px`;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.scale(dpr, dpr);
     };
     setCanvasSize();
@@ -29,7 +41,7 @@ export default function FondoAnimado() {
     const mouse = {
       x: -1000,
       y: -1000,
-      radius: 150, // Distancia máxima para interactuar con el ratón
+      radius: 150,
     };
 
     const handleMouseMove = (e: MouseEvent) => {
@@ -42,17 +54,32 @@ export default function FondoAnimado() {
       mouse.y = -1000;
     };
 
-    const handleResize = () => {
-      setCanvasSize();
-      init(); // Reiniciar partículas al cambiar tamaño
-    };
-
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseout", handleMouseLeave);
-    window.addEventListener("resize", handleResize);
-
     // Paleta Cyberpunk: Cian, Rosa Neón y Púrpura
     const colors = ["#00f0ff", "#ff007f", "#8a2be2"];
+
+    // --- Sprites de "glow" pre-renderizados ---
+    // En vez de usar ctx.shadowBlur en cada partícula y en cada frame (muy caro:
+    // el navegador recalcula un blur por partícula, por frame), dibujamos UNA vez
+    // por color un círculo con resplandor en un canvas aparte, y luego pegamos ese
+    // sprite con drawImage (barato) en cada frame. Mismo efecto visual, mucho menos CPU.
+    const glowSprites = new Map<string, HTMLCanvasElement>();
+    const SPRITE_SIZE = 40;
+    for (const color of colors) {
+      const sprite = document.createElement("canvas");
+      sprite.width = SPRITE_SIZE;
+      sprite.height = SPRITE_SIZE;
+      const sctx = sprite.getContext("2d")!;
+      const cx = SPRITE_SIZE / 2;
+      const gradient = sctx.createRadialGradient(cx, cx, 0, cx, cx, cx);
+      gradient.addColorStop(0, color);
+      gradient.addColorStop(0.35, color);
+      gradient.addColorStop(1, "rgba(0,0,0,0)");
+      sctx.fillStyle = gradient;
+      sctx.beginPath();
+      sctx.arc(cx, cx, cx, 0, Math.PI * 2);
+      sctx.fill();
+      glowSprites.set(color, sprite);
+    }
 
     class Particle {
       x: number;
@@ -80,17 +107,19 @@ export default function FondoAnimado() {
 
       draw() {
         if (!ctx) return;
-        ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-        ctx.fillStyle = this.color;
-        // Efecto de resplandor (Glow)
-        ctx.shadowBlur = 10;
-        ctx.shadowColor = this.color;
-        ctx.fill();
+        const sprite = glowSprites.get(this.color);
+        if (!sprite) return;
+        const drawSize = this.size * 6; // el sprite incluye el halo, por eso es más grande que el punto
+        ctx.drawImage(
+          sprite,
+          this.x - drawSize / 2,
+          this.y - drawSize / 2,
+          drawSize,
+          drawSize
+        );
       }
 
       update() {
-        // Rebotar en los bordes
         if (this.x > window.innerWidth || this.x < 0) {
           this.directionX = -this.directionX;
         }
@@ -98,7 +127,6 @@ export default function FondoAnimado() {
           this.directionY = -this.directionY;
         }
 
-        // Mover partícula
         this.x += this.directionX;
         this.y += this.directionY;
 
@@ -106,17 +134,24 @@ export default function FondoAnimado() {
       }
     }
 
-    // Inicializar el sistema de partículas
+    // Tope de partículas: antes la cantidad crecía sin límite con el área de
+    // pantalla (en un monitor 4K llegaba a ~800, con ~640.000 chequeos de
+    // conexión por frame). Con este tope el efecto se ve igual de "vivo" pero
+    // el costo por frame queda acotado sin importar el tamaño de pantalla.
+    const MAX_PARTICLES = 90;
+
     const init = () => {
       particlesArray = [];
-      // Cantidad de partículas basada en el tamaño de la pantalla
-      const numberOfParticles = (window.innerWidth * window.innerHeight) / 10000;
+      const numberOfParticles = Math.min(
+        MAX_PARTICLES,
+        Math.floor((window.innerWidth * window.innerHeight) / 10000)
+      );
       for (let i = 0; i < numberOfParticles; i++) {
         const size = Math.random() * 2 + 1.5;
         const x = Math.random() * (window.innerWidth - size * 2) + size * 2;
         const y = Math.random() * (window.innerHeight - size * 2) + size * 2;
-        const directionX = Math.random() * 1 - 0.5; // Velocidad X
-        const directionY = Math.random() * 1 - 0.5; // Velocidad Y
+        const directionX = Math.random() * 1 - 0.5;
+        const directionY = Math.random() * 1 - 0.5;
         const color = colors[Math.floor(Math.random() * colors.length)];
         particlesArray.push(
           new Particle(x, y, directionX, directionY, size, color)
@@ -124,10 +159,8 @@ export default function FondoAnimado() {
       }
     };
 
-    // Conectar partículas entre sí y con el ratón
     const connect = () => {
-      if (!ctx) return;
-      const maxDistance = 120; // Distancia para que se unan con una línea
+      const maxDistance = 120;
 
       for (let a = 0; a < particlesArray.length; a++) {
         for (let b = a; b < particlesArray.length; b++) {
@@ -135,11 +168,10 @@ export default function FondoAnimado() {
           const dy = particlesArray[a].y - particlesArray[b].y;
           const distanceSq = dx * dx + dy * dy;
 
-          // Si están cerca, dibujar una línea entre ellas
           if (distanceSq < maxDistance * maxDistance) {
             const distance = Math.sqrt(distanceSq);
             const opacity = 1 - distance / maxDistance;
-            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity * 0.25})`; // Línea cian sutil
+            ctx.strokeStyle = `rgba(0, 240, 255, ${opacity * 0.25})`;
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
@@ -148,7 +180,6 @@ export default function FondoAnimado() {
           }
         }
 
-        // Conectar la partícula actual con el ratón
         const dxMouse = mouse.x - particlesArray[a].x;
         const dyMouse = mouse.y - particlesArray[a].y;
         const distanceMouseSq = dxMouse * dxMouse + dyMouse * dyMouse;
@@ -156,7 +187,7 @@ export default function FondoAnimado() {
         if (distanceMouseSq < mouse.radius * mouse.radius) {
           const distanceMouse = Math.sqrt(distanceMouseSq);
           const opacity = 1 - distanceMouse / mouse.radius;
-          ctx.strokeStyle = `rgba(255, 0, 127, ${opacity * 0.6})`; // Línea rosa brillante al ratón
+          ctx.strokeStyle = `rgba(255, 0, 127, ${opacity * 0.6})`;
           ctx.lineWidth = 1.5;
           ctx.beginPath();
           ctx.moveTo(particlesArray[a].x, particlesArray[a].y);
@@ -166,16 +197,45 @@ export default function FondoAnimado() {
       }
     };
 
-    // Bucle de animación
     const animate = () => {
-      if (!ctx) return;
+      if (!isRunning) return;
       animationFrameId = requestAnimationFrame(animate);
-      // Limpiar el canvas en cada frame
       ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
       particlesArray.forEach((particle) => particle.update());
       connect();
     };
+
+    // El resize se debounce: reconstruir el canvas y reiniciar partículas en
+    // CADA evento de resize (que puede dispararse decenas de veces al arrastrar
+    // una ventana) era costoso. Esperamos a que el usuario termine de mover/rotar.
+    let resizeTimeout: ReturnType<typeof setTimeout>;
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        setCanvasSize();
+        init();
+      }, 150);
+    };
+
+    // Pausar el bucle cuando la pestaña no está visible: evita quemar batería/CPU
+    // de fondo cuando el usuario cambió a otra pestaña o minimizó la ventana.
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        isRunning = false;
+        cancelAnimationFrame(animationFrameId);
+      } else {
+        if (!isRunning) {
+          isRunning = true;
+          animate();
+        }
+      }
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    window.addEventListener("mouseout", handleMouseLeave);
+    window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     init();
     animate();
@@ -184,6 +244,9 @@ export default function FondoAnimado() {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseout", handleMouseLeave);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      clearTimeout(resizeTimeout);
+      isRunning = false;
       cancelAnimationFrame(animationFrameId);
     };
   }, []);

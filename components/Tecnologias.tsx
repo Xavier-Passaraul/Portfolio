@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import {
   SiReact,
   SiTypescript,
@@ -73,17 +72,6 @@ const cssVars = (vars: Record<string, string | number>): CSSProperties =>
   vars as CSSProperties;
 
 export default function Tecnologias() {
-  // Misma fuente (Fira Code) que usa el terminal-header de Contacto.
-  useEffect(() => {
-    if (document.getElementById("fira-code-font")) return;
-    const fontLink = document.createElement("link");
-    fontLink.id = "fira-code-font";
-    fontLink.href =
-      "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&display=swap";
-    fontLink.rel = "stylesheet";
-    document.head.appendChild(fontLink);
-  }, []);
-
   return (
     <section id="tecnologias" className="py-24">
       <style>{`
@@ -173,7 +161,7 @@ export default function Tecnologias() {
         #tecnologias .dot { width: 12px; height: 12px; border-radius: 50%; }
 
         #tecnologias .terminal-path {
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-fira), monospace;
             color: #fff;
             font-size: 0.9rem;
             margin: 0 auto;
@@ -244,11 +232,11 @@ export default function Tecnologias() {
           </div>
 
           <div className="tec-body">
-            <div className="mb-10 font-mono" style={{ fontFamily: "'Fira Code', monospace" }}>
+            <div className="mb-10 font-mono" style={{ fontFamily: "var(--font-fira), monospace" }}>
               <span className="text-pink-500">const</span>{" "}
               <span className="text-blue-400">stack</span>{" "}
               <span className="text-slate-300">=</span>{" "}
-              <span className="text-emerald-400">"Mis Tecnologías"</span>
+              <span className="text-emerald-400">&quot;Mis Tecnologías&quot;</span>
               <span className="text-slate-300">;</span>
               <span className="ml-2 animate-pulse text-slate-400">_</span>
             </div>

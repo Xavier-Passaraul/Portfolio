@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect } from "react";
 import { Mail, Globe } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 
@@ -42,23 +41,10 @@ const contactos = [
 ];
 
 export default function Contacto() {
-  // Carga las mismas fuentes (Poppins + Fira Code) que usa el diseño liquid-glass original.
-  useEffect(() => {
-    const fontLink = document.createElement("link");
-    fontLink.href =
-      "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Poppins:wght@300;400;600&display=swap";
-    fontLink.rel = "stylesheet";
-    document.head.appendChild(fontLink);
-
-    return () => {
-      document.head.removeChild(fontLink);
-    };
-  }, []);
-
   return (
     <section
       id="contacto"
-      className="py-24 border-t border-slate-800 font-['Poppins',sans-serif]"
+      className="py-24 border-t border-slate-800 font-[var(--font-poppins),sans-serif]"
     >
       <style>{`
         #contacto .liquid-container {
@@ -210,7 +196,7 @@ export default function Contacto() {
         #contacto .input-group { display: flex; flex-direction: column; gap: 8px; }
 
         #contacto .input-group label {
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-fira), monospace;
             font-size: 0.75rem;
             color: #00f0ff;
             text-transform: uppercase;
@@ -225,7 +211,7 @@ export default function Contacto() {
             padding: 12px;
             border-radius: 8px;
             color: #fff;
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-fira), monospace;
             font-size: 0.9rem;
             outline: none;
             transition: all 0.3s ease;
@@ -247,7 +233,7 @@ export default function Contacto() {
             border: none;
             border-radius: 8px;
             font-weight: bold;
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-fira), monospace;
             cursor: pointer;
             transition: all 0.3s ease;
             margin-top: 10px;
@@ -288,7 +274,7 @@ export default function Contacto() {
             </div>
             <span
               style={{
-                fontFamily: "'Fira Code', monospace",
+                fontFamily: "var(--font-fira), monospace",
                 color: "#fff",
                 fontSize: "0.9rem",
               }}
@@ -335,16 +321,16 @@ export default function Contacto() {
             {/* Formulario */}
             <form className="form-grid">
               <div className="input-group">
-                <label>{"> user.name"}</label>
-                <input type="text" placeholder="'Tu nombre'" />
+                <label htmlFor="contacto-nombre">{"> user.name"}</label>
+                <input id="contacto-nombre" name="nombre" type="text" placeholder="'Tu nombre'" autoComplete="name" />
               </div>
               <div className="input-group">
-                <label>{"> user.email"}</label>
-                <input type="email" placeholder="'tu@email.com'" />
+                <label htmlFor="contacto-email">{"> user.email"}</label>
+                <input id="contacto-email" name="email" type="email" placeholder="'tu@email.com'" autoComplete="email" />
               </div>
               <div className="input-group full-width">
-                <label>{"> config.asunto"}</label>
-                <select>
+                <label htmlFor="contacto-asunto">{"> config.asunto"}</label>
+                <select id="contacto-asunto" name="asunto">
                   <option>Propuesta de Trabajo</option>
                   <option>Proyecto Freelance</option>
                   <option>Consultoría Técnica</option>
@@ -352,8 +338,8 @@ export default function Contacto() {
                 </select>
               </div>
               <div className="input-group full-width">
-                <label>{"> payload.mensaje"}</label>
-                <textarea rows={4} placeholder="Escribe tu mensaje aquí..." />
+                <label htmlFor="contacto-mensaje">{"> payload.mensaje"}</label>
+                <textarea id="contacto-mensaje" name="mensaje" rows={4} placeholder="Escribe tu mensaje aquí..." />
               </div>
               <button type="button">./enviar_datos.sh</button>
             </form>

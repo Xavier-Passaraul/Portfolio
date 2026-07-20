@@ -1,6 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
 import { Plus, Globe, Smartphone } from "lucide-react";
 import type { Proyecto } from "@/lib/proyectosData";
@@ -78,8 +79,13 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
                 (cap, i) => (
                   <div key={i} className="pc-img-placeholder">
                     {cap ? (
-                      // eslint-disable-next-line @next/next/no-img-element
-                      <img src={cap} alt="Dashboard View" />
+                      <Image
+                        src={cap}
+                        alt={`Captura de pantalla del proyecto ${proyecto.titulo}`}
+                        fill
+                        sizes="(min-width: 640px) 33vw, 100vw"
+                        style={{ objectFit: "cover" }}
+                      />
                     ) : (
                       <span>captura.png</span>
                     )}
@@ -91,14 +97,17 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
             <div className="pc-readme-desc">
               <h3>📄 README.md</h3>
               <div className="pc-caso-block">
+                {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
                 <span className="pc-caso-label">// problema</span>
                 <p>{proyecto.caso.problema}</p>
               </div>
               <div className="pc-caso-block">
+                {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
                 <span className="pc-caso-label">// solución</span>
                 <p>{proyecto.caso.solucion}</p>
               </div>
               <div className="pc-caso-block">
+                {/* eslint-disable-next-line react/jsx-no-comment-textnodes */}
                 <span className="pc-caso-label">// resultado</span>
                 <p>{proyecto.caso.resultado}</p>
               </div>
@@ -353,6 +362,7 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         }
 
         .pc-img-placeholder {
+          position: relative;
           width: 100%;
           height: 96px;
           border-radius: 8px;
@@ -378,12 +388,6 @@ export default function ProjectCard({ proyecto, abierto, onToggle }: Props) {
         .pc-img-placeholder:hover {
           transform: scale(1.1);
           z-index: 20;
-        }
-
-        .pc-img-placeholder img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
         }
 
         /* --- README --- */

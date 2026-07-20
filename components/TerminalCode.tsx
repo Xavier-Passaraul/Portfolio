@@ -66,7 +66,52 @@ export default function TerminalCode() {
     return () => clearTimeout(timeout);
   }, [typed, total]);
 
-  let restante = typed;
+  // Recorre las líneas una sola vez, calculando cuánto texto de cada línea ya
+  // "se tipeó". Se hace con reduce (sin mutar variables fuera del callback)
+  // para que el cálculo sea puro durante el render.
+  const lineasRenderizadas = codigo.reduce<{ restante: number; nodos: React.ReactNode[] }>(
+    (acc, line, li) => {
+      const lineLen = line.reduce((s, tok) => s + tok.t.length, 0);
+
+      if (acc.restante <= 0) {
+        acc.nodos.push(<div key={li}>&nbsp;</div>);
+        return acc;
+      }
+
+      if (acc.restante >= lineLen) {
+        const restanteDespues = acc.restante - (lineLen + 1);
+        const cursorAqui = restanteDespues <= 0;
+        acc.nodos.push(
+          <div key={li} className="whitespace-pre">
+            {line.map((tok, ti) => (
+              <span key={ti} className={tok.c}>{tok.t}</span>
+            ))}
+            {cursorAqui && (
+              <span className="text-[#00f0ff] animate-pulse">|</span>
+            )}
+          </div>
+        );
+        return { restante: restanteDespues, nodos: acc.nodos };
+      }
+
+      // Línea parcial: acá está tipeando ahora
+      let restanteLinea = acc.restante;
+      const parcial = line.map((tok, ti) => {
+        if (restanteLinea <= 0) return null;
+        const visible = tok.t.slice(0, restanteLinea);
+        restanteLinea -= tok.t.length;
+        return <span key={ti} className={tok.c}>{visible}</span>;
+      });
+      acc.nodos.push(
+        <div key={li} className="whitespace-pre">
+          {parcial}
+          <span className="text-[#00f0ff] animate-pulse">|</span>
+        </div>
+      );
+      return { restante: -1, nodos: acc.nodos };
+    },
+    { restante: typed, nodos: [] }
+  ).nodos;
 
   return (
     <motion.div
@@ -84,7 +129,7 @@ export default function TerminalCode() {
         </div>
         <span
           style={{
-            fontFamily: "'Fira Code', monospace",
+            fontFamily: "var(--font-fira), monospace",
             color: "#fff",
             fontSize: "0.9rem",
           }}
@@ -104,44 +149,7 @@ export default function TerminalCode() {
 
         {/* Código */}
         <div className="pl-2 flex-1 overflow-x-auto">
-          {codigo.map((line, li) => {
-            const lineLen = line.reduce((s, tok) => s + tok.t.length, 0);
-
-            if (restante <= 0) {
-              return <div key={li}>&nbsp;</div>;
-            }
-
-            if (restante >= lineLen) {
-              restante -= lineLen + 1;
-              const cursorAqui = restante <= 0;
-              return (
-                <div key={li} className="whitespace-pre">
-                  {line.map((tok, ti) => (
-                    <span key={ti} className={tok.c}>{tok.t}</span>
-                  ))}
-                  {cursorAqui && (
-                    <span className="text-[#00f0ff] animate-pulse">|</span>
-                  )}
-                </div>
-              );
-            }
-
-            // Línea parcial: acá está tipeando ahora
-            let restanteLinea = restante;
-            const parcial = line.map((tok, ti) => {
-              if (restanteLinea <= 0) return null;
-              const visible = tok.t.slice(0, restanteLinea);
-              restanteLinea -= tok.t.length;
-              return <span key={ti} className={tok.c}>{visible}</span>;
-            });
-            restante = -1;
-            return (
-              <div key={li} className="whitespace-pre">
-                {parcial}
-                <span className="text-[#00f0ff] animate-pulse">|</span>
-              </div>
-            );
-          })}
+          {lineasRenderizadas}
         </div>
       </div>
     </motion.div>

@@ -19,7 +19,7 @@ export default function Navbar() {
 
   return (
     <div className="sticky top-4 z-50 w-full flex justify-center px-4">
-      <nav className="relative w-full max-w-3xl">
+      <nav className="relative w-full max-w-3xl" aria-label="Navegación principal">
         {/* Contenedor de vidrio líquido */}
         <div className="relative rounded-full border border-white/10 bg-slate-900/70 backdrop-blur-md shadow-[0_8px_32px_rgba(0,0,0,0.35)] overflow-hidden">
           {/* Highlight superior: simula el reflejo de luz en el cristal */}
@@ -64,9 +64,13 @@ export default function Navbar() {
             {/* Botón Menú Móvil */}
             <button
               onClick={toggleMenu}
+              aria-expanded={isOpen}
+              aria-controls="mobile-menu"
               className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-full text-slate-300 hover:text-white hover:bg-white/10 transition-colors"
             >
-              <span className="sr-only">Abrir menú principal</span>
+              <span className="sr-only">
+                {isOpen ? "Cerrar menú principal" : "Abrir menú principal"}
+              </span>
               {isOpen ? (
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -84,6 +88,7 @@ export default function Navbar() {
         <AnimatePresence>
           {isOpen && (
             <motion.div
+              id="mobile-menu"
               initial={{ opacity: 0, y: -10, scale: 0.98 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               exit={{ opacity: 0, y: -10, scale: 0.98 }}

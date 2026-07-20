@@ -1,25 +1,13 @@
 "use client";
 
-import { useEffect } from "react";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 export default function Proyectos() {
-  // Mismas fuentes (Fira Code + Poppins) que usa el resto del diseño liquid-glass.
-  useEffect(() => {
-    if (document.getElementById("liquid-glass-fonts")) return;
-    const fontLink = document.createElement("link");
-    fontLink.id = "liquid-glass-fonts";
-    fontLink.href =
-      "https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Poppins:wght@300;400;600&display=swap";
-    fontLink.rel = "stylesheet";
-    document.head.appendChild(fontLink);
-  }, []);
-
   return (
     <section
       id="proyectos"
-      className="py-24 border-t border-slate-800 font-['Poppins',sans-serif]"
+      className="py-24 border-t border-slate-800 font-[var(--font-poppins),sans-serif]"
     >
       <style>{`
         #proyectos .liquid-container {
@@ -117,7 +105,7 @@ export default function Proyectos() {
             border: none;
             border-radius: 12px;
             font-weight: bold;
-            font-family: 'Fira Code', monospace;
+            font-family: var(--font-fira), monospace;
             font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -162,7 +150,7 @@ export default function Proyectos() {
             </div>
             <span
               style={{
-                fontFamily: "'Fira Code', monospace",
+                fontFamily: "var(--font-fira), monospace",
                 color: "#fff",
                 fontSize: "0.9rem",
               }}
@@ -178,7 +166,7 @@ export default function Proyectos() {
             </span>
             <span
               className="text-xs text-cyan-400 font-medium tracking-wide uppercase"
-              style={{ fontFamily: "'Fira Code', monospace" }}
+              style={{ fontFamily: "var(--font-fira), monospace" }}
             >
               Archivos cargados
             </span>

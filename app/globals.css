@@ -9,6 +9,11 @@ body {
   color: #f8fafc; /* Texto claro (Slate 50) */
 }
 
+/* Los anchors (#tecnologias, #contacto, etc.) no quedan tapados por el navbar sticky */
+section[id] {
+  scroll-margin-top: 5.5rem;
+}
+
 @keyframes blink {
   0%, 50% { opacity: 1; }
   50.01%, 100% { opacity: 0; }
@@ -16,5 +21,23 @@ body {
 
 .animate-blink {
   animation: blink 1s step-end infinite;
+}
+
+/* Accesibilidad: respeta la preferencia del sistema de reducir animaciones.
+   Mantiene el diseño y el contenido igual, sólo apaga movimiento decorativo
+   para personas con trastornos vestibulares o que activaron "reduce motion". */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
