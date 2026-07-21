@@ -25,7 +25,6 @@ export default function DnaHelix() {
     window.addEventListener("resize", resize);
     resize();
 
-    // Configuración de la estructura
     const particles: Particle[] = [];
     const spread = 3000;
     const halfSpread = spread / 2;
@@ -35,9 +34,8 @@ export default function DnaHelix() {
     const rungSpacing = 45;
     const pointsPerRung = 8;
 
-    // Colores con mayor luminosidad y brillo
-    const color1 = "#82c8ff"; // Azul luminoso
-    const color2 = "#ff82b2"; // Rosa luminoso
+    const color1 = "#82c8ff";
+    const color2 = "#ff82b2";
 
     class Particle {
       baseX: number;
@@ -83,15 +81,12 @@ export default function DnaHelix() {
       }
 
       update(time: number) {
-        // Movimiento horizontal lento
         let currentX = this.baseX - time * 0.035;
         currentX = ((currentX + halfSpread) % spread + spread) % spread - halfSpread;
 
-        // Rotación
         const globalAngle = time * 0.001;
         const tx = currentX;
 
-        // EFECTO ZIGZAG / OSCILACIÓN
         const zigzagY = Math.sin(currentX * 0.003 + time * 0.0005) * 120 + Math.cos(currentX * 0.008) * 30;
 
         const ty = Math.sin(this.angleOffset + globalAngle) * this.radius + zigzagY;
@@ -148,7 +143,6 @@ export default function DnaHelix() {
       if (startTime === null) startTime = timestamp;
       const time = timestamp - startTime;
 
-      // Fondo con estela para dar sensación de movimiento fluido
       ctx!.globalCompositeOperation = "source-over";
       ctx!.fillStyle = "rgba(11, 15, 25, 0.3)";
       ctx!.fillRect(0, 0, width, height);
@@ -166,10 +160,9 @@ export default function DnaHelix() {
         if (scale > 0) {
           const screenX = cx + p.x * scale;
           const screenY = cy + p.y * scale;
-          const baseSize = p.isRung ? 1.2 : 2.2; // Un pelín más grandes para dar más luz
+          const baseSize = p.isRung ? 1.2 : 2.2;
           const size = baseSize * scale;
 
-          // Aumentamos la opacidad máxima de 0.5 a 0.8 para dar más vida a los colores
           const drawAlpha = p.alpha * Math.min(1, scale * 1.5) * 0.8;
 
           if (drawAlpha <= 0) return;
@@ -197,7 +190,6 @@ export default function DnaHelix() {
     <canvas
       ref={canvasRef}
       className="absolute top-0 bottom-0 left-1/2 w-screen -translate-x-1/2"
-      style={{ opacity: 0.85 }}
-    />
+      style={{ opacity: 0.85 }}/>
   );
 }

@@ -43,9 +43,7 @@ const contactos = [
 export default function Contacto() {
   return (
     <section
-      id="contacto"
-      className="py-24 border-t border-slate-800 font-[var(--font-poppins),sans-serif]"
-    >
+      id="contacto" className="py-24 border-t border-slate-800 font-[var(--font-poppins),sans-serif]">
       <style>{`
         #contacto .liquid-container {
             width: 100%;
@@ -55,9 +53,8 @@ export default function Contacto() {
             perspective: 1200px;
         }
 
-        /* ==========================================
-           1. ANIMACIONES DE COLORES
-           ========================================== */
+        /* Animaciones de los colores */
+
         #contacto .bg-blobs {
             position: absolute;
             top: 50%;
@@ -97,9 +94,8 @@ export default function Contacto() {
             100% { transform: translate(-150px, 150px) scale(1.4); }
         }
 
-        /* ==========================================
-           2. LIQUID GLASS
-           ========================================== */
+        /* Liquid glass */
+
         #contacto .liquid-card {
             position: relative;
             z-index: 10;
@@ -129,9 +125,8 @@ export default function Contacto() {
         #contacto .dots { display: flex; gap: 8px; margin-right: 20px; }
         #contacto .dot { width: 12px; height: 12px; border-radius: 50%; }
 
-        /* ==========================================
-           3. LAYOUT: BOTONES + FORMULARIO
-           ========================================== */
+        /* Botones y formulario */
+
         #contacto .layout-grid {
             display: grid;
             grid-template-columns: 1fr 1.2fr;
@@ -165,6 +160,7 @@ export default function Contacto() {
         #contacto .contact-btn svg { font-size: 1.4rem; transition: transform 0.3s ease; }
 
         /* Efectos Neón por color */
+
         #contacto .contact-btn.c-green:hover { border-color: #25D366; background: rgba(37, 211, 102, 0.1); box-shadow: 0 0 20px rgba(37, 211, 102, 0.3); }
         #contacto .contact-btn.c-green svg { color: #25D366; }
 
@@ -181,6 +177,7 @@ export default function Contacto() {
         #contacto .contact-btn:hover svg { transform: scale(1.2); }
 
         /* --- Formulario --- */
+
         #contacto .form-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -257,7 +254,9 @@ export default function Contacto() {
       `}</style>
 
       <div className="liquid-container">
+
         {/* Fondo animado */}
+
         <div className="bg-blobs">
           <div className="blob b1" />
           <div className="blob b2" />
@@ -265,6 +264,7 @@ export default function Contacto() {
         </div>
 
         {/* Cristal principal */}
+
         <div className="liquid-card">
           <div className="terminal-header">
             <div className="dots">
@@ -272,6 +272,7 @@ export default function Contacto() {
               <div className="dot" style={{ background: "#ffbd2e" }} />
               <div className="dot" style={{ background: "#27c93f" }} />
             </div>
+
             <span
               style={{
                 fontFamily: "var(--font-fira), monospace",
@@ -303,6 +304,7 @@ export default function Contacto() {
 
           <div className="layout-grid">
             {/* Métodos de contacto */}
+
             <div className="contact-methods">
               {contactos.map(({ label, href, Icono, externo, colorClass }) => (
                 <a
@@ -319,6 +321,7 @@ export default function Contacto() {
             </div>
 
             {/* Formulario */}
+            
             <form className="form-grid">
               <div className="input-group">
                 <label htmlFor="contacto-nombre">{"> user.name"}</label>

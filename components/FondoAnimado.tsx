@@ -15,8 +15,6 @@ export default function FondoAnimado() {
     let animationFrameId: number;
     let isRunning = true;
 
-    // DPR limitado a 2: en pantallas 3x/4x no aporta nitidez perceptible
-    // y cuadriplica/nonuplica los píxeles a dibujar en cada frame.
     const getDpr = () => Math.min(window.devicePixelRatio || 1, 2);
 
     const setCanvasSize = () => {
@@ -30,7 +28,6 @@ export default function FondoAnimado() {
     };
     setCanvasSize();
 
-    // Posición del ratón para interactividad
     const mouse = {
       x: -1000,
       y: -1000,
@@ -47,14 +44,8 @@ export default function FondoAnimado() {
       mouse.y = -1000;
     };
 
-    // Paleta Cyberpunk: Cian, Rosa Neón y Púrpura
     const colors = ["#00f0ff", "#ff007f", "#8a2be2"];
 
-    // --- Sprites de "glow" pre-renderizados ---
-    // En vez de usar ctx.shadowBlur en cada partícula y en cada frame (muy caro:
-    // el navegador recalcula un blur por partícula, por frame), dibujamos UNA vez
-    // por color un círculo con resplandor en un canvas aparte, y luego pegamos ese
-    // sprite con drawImage (barato) en cada frame. Mismo efecto visual, mucho menos CPU.
     const glowSprites = new Map<string, HTMLCanvasElement>();
     const SPRITE_SIZE = 40;
     for (const color of colors) {
